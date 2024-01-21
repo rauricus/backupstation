@@ -50,5 +50,16 @@ Kippschalter
   Dadurch muss nur noch ein Schalter angeschlossen werden, der entweder auf 3.3V (wenn pull-down aktiviert) oder auf GND (wenn pull-up aktiviert) führt, wenn er geschlossen ist
   (see Schalter mit eingebauten Pull-up/Pull-down Widerständen: https://raspi.tv/2013/how-to-use-wiringpi2-for-python-with-pull-ups-or-pull-downs-and-pwm)
 
+---
 
+ePaper Display
+--------------
+
+- Die Treiberdateien sind dabei. Tritt ein "File not found" Fehler im "init" auf, dann muss das SPI im Raspberry Pi enabled werden.
+
+	- Run sudo raspi-config
+	- Select "Interfacing Options"
+	- Arrow down to "SPI"
+	- Select yes when it asks you to enable SPI
+  
   
