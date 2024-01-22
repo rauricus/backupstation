@@ -113,7 +113,7 @@ try:
         exit();    #if the GPIO is not actively pulled down the scrips exits here
 
     logging.info("Run complete, shutting down.")
-    os.system("sudo shutdown 0");  #If the switch in in Backup-Mode the Raspi will be shut down here
+    os.system("sudo shutdown --poweroff now");  #If the switch in in Backup-Mode the Raspi will be shut down here
     
 except IOError as e:
     logging.info(e)
