@@ -60,7 +60,7 @@ def backup(dir_name):
 #============ Main Flow ===========================================================================
 
 if wiringpi.digitalRead(2):
-    logging.info("Switch open, no backup takes place.")
+    logging.info("No backup takes place.")
     exit();    #if the GPIO is not actively pulled down the scrips exits here
 
 
@@ -82,7 +82,7 @@ try:
     draw = ImageDraw.Draw(Himage)
     draw.rectangle((0, 0, 400, 30), outline = 0, fill=0)
     draw.rectangle((0, 280, 400, 300), outline = 0, fill=0)
-    draw.text((60, 0), 'SURASTO Backup Station', font = font24, fill = 255)
+    draw.text((160, 0), 'Backup Station', font = font24, fill = 255)
     epd.display(epd.getbuffer(Himage))
     time.sleep(2)
 

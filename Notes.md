@@ -36,6 +36,11 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 
 ---
 
+- rdiff installieren
+	sudo apt-get install rdiff-backup
+
+---
+
 Kippschalter
 ------------
 
@@ -62,4 +67,4 @@ ePaper Display
 	- Arrow down to "SPI"
 	- Select yes when it asks you to enable SPI
   
-  
+ ---
