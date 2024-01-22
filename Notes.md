@@ -39,6 +39,37 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 - rdiff installieren
 	sudo apt-get install rdiff-backup
 
+- store SMB credentials in a special file and protect it (a bit)
+	sudo vi /etc/.smb-credentials-theca
+	sudo chmod 600 .smb-credentials-theca
+
+  File contains a username, password and an optional workgroup
+	username=Andreas
+	password=value
+
+	(domain=value) <- did not put that there
+
+- add smb volume to backup to /etc/fstab
+	sudo vi /etc/fstab
+	
+	//theca.heimnetz.localnet/home	/mnt/network/home	cifs	uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-theca
+
+- create corresponding folder
+	sudo mkdir /mnt/network
+	sudo mkdir /mnt/network/home
+
+- add external hd to /etc/fstab
+	sudo vi /etc/fstab
+
+	/dev/sda1	/mnt/ext_hdd	ext4	rw	0	0
+
+- create corresponding folder
+	sudo mkdir /mnt/ext_hdd
+
+- test if we can mount all drives
+	sudo mount -a
+
+
 ---
 
 Kippschalter
