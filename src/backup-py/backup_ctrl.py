@@ -83,7 +83,7 @@ try:
     draw = ImageDraw.Draw(Himage)
     draw.rectangle((0, 0, 400, 30), outline = 0, fill=0)
     draw.rectangle((0, 280, 400, 300), outline = 0, fill=0)
-    draw.text((160, 0), 'Backup Station', font = font24, fill = 255)
+    draw.text((120, 0), 'Backup Station', font = font24, fill = 255)
     epd.display(epd.getbuffer(Himage))
     time.sleep(2)
 
@@ -103,7 +103,7 @@ try:
     today = date.today()
     current_time = now.strftime("%H:%M:%S")
     current_date = today.strftime("%d-%m-%Y ");
-    draw.text((30, 281), 'Letztes Backup: '+current_date + current_time , font = font18, fill = 255)
+    draw.text((60, 281), 'Letztes Backup: '+current_date + current_time , font = font18, fill = 255)
 
     epd.display(epd.getbuffer(Himage))
     time.sleep(2)
