@@ -48,7 +48,7 @@ def backup(dir_name):
        if cols[0] == 'DeletedFiles':
            out_string = out_string+' Del: ' + cols[1]
        if cols[0] == 'ChangedFiles':
-           out_string = out_string+' Chng: ' + cols[1]
+           out_string = out_string+' Chgd: ' + cols[1]
   
    draw.text((110, ypos), out_string, font=font18, fill=0)
    epd.display(epd.getbuffer(Himage))
@@ -65,19 +65,20 @@ if wiringpi.digitalRead(2):
 
 
 try:
-    logging.info("Start ePaper Display")
+    logging.info("Starting ePaper display...")
     
     epd = epd4in2.EPD()
-    logging.info("init and Clear")
     epd.init()
+    logging.info("... inited")
     epd.Clear()
+    logging.info("... cleared")
     time.sleep(3)
     
     font24 = ImageFont.truetype('Font.ttc', 24)
     font18 = ImageFont.truetype('Font.ttc', 18)
     font35 = ImageFont.truetype('Font.ttc', 35)
     
-    logging.info("1.Drawing on the Horizontal image...")
+    logging.info("Drawing initial background image...")
     Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(Himage)
     draw.rectangle((0, 0, 400, 30), outline = 0, fill=0)
@@ -90,30 +91,35 @@ try:
     dir_list = os.listdir(BACKUP_TARGETS_BASE_DIR)     # get a list of all mounted directories
     ypos = 30   # set the yposition of the ePaper text output
 
+    logging.info("Starting backup...")
     for dir in dir_list:
        backup(dir)
        ypos = ypos + 20
+
+    logging.info("Backup done.")
 
     #===================  Write Footer on ePaper and shutdown
     now = datetime.now()
     today = date.today()
     current_time = now.strftime("%H:%M:%S")
     current_date = today.strftime("%d-%m-%Y ");
-    draw.text((30, 281), 'Letzter Backup: '+current_date + current_time , font = font18, fill = 255)
+    draw.text((30, 281), 'Letztes Backup: '+current_date + current_time , font = font18, fill = 255)
 
     epd.display(epd.getbuffer(Himage))
     time.sleep(2)
 
     if wiringpi.digitalRead(2):
-       exit();    #if the GPIO is not actively pulled down the scrips exits here
+        logging.info("Switch changed, not shutting down.")
+        exit();    #if the GPIO is not actively pulled down the scrips exits here
 
+    logging.info("Run complete, shutting down.")
     os.system("sudo shutdown 0");  #If the switch in in Backup-Mode the Raspi will be shut down here
     
 except IOError as e:
     logging.info(e)
     
 except KeyboardInterrupt:    
-    logging.info("ctrl + c:")
+    logging.info("ctrl+c:")
     epd4in2.epdconfig.module_exit()
     exit()
 
