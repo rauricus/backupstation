@@ -58,10 +58,54 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 	sudo mkdir /mnt/network
 	sudo mkdir /mnt/network/home
 
+- format external hd
+	sudo fdisk -l
+
+	Shows all disks. The external disk is mentioned there, too (e.g
+	Disk /dev/sda: 4.55 TiB, 5000981078016 bytes, 9767541168 sectors)
+
+  ** Note that fdisk can't create any partition larger than 2TB. **
+
+  We there for use parted or gdisk.
+
+  Source: https://www.cyberciti.biz/tips/fdisk-unable-to-create-partition-greater-2tb.html
+
+  1. Check if GPT support is enabled in the kernel. 
+
+  	 If not, Pi won't boot and might corrupt a disk.
+
+  	 sudo modprobe configs
+  	 zcat /proc/config.gz | grep "CONFIG_EFI_PARTITION"
+
+  	 Should return "y"
+
+  2. Run parted and create a new partition
+
+  	 sudo parted /dev/sda (if that's the disk)
+
+  	 	mklabel gpt
+  	 		creates new partition table
+  	 	unit TB
+  	 		uses TB as unit to use
+  	 	mkpart primary 0 5
+  	 		makes a 5TB primary partition
+	 		print
+	 			shows the current partition table
+ 			quit
+ 				saves changes and quits
+
+ 	3. Format the partition
+
+ 			sudo mkfs.ext4 /dev/sda1
+
 - add external hd to /etc/fstab
 	sudo vi /etc/fstab
 
 	/dev/sda1	/mnt/ext_hdd	ext4	rw	0	0
+
+	** Note that, once external hd is there, the Pi will not boot up completely,
+	   if the disk is missing during boot. There might be a timeout at one point,
+	   but I had to re-connect it to go through the entire startup. **
 
 - create corresponding folder and give it to pi user
 	sudo mkdir /mnt/ext_hdd
