@@ -14,7 +14,7 @@ import time
 from PIL import Image,ImageDraw,ImageFont
 import traceback
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 #==================================== Global Settings =============================================
 BACKUP_TARGETS_BASE_DIR = "/mnt/network/"
