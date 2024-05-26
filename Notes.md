@@ -13,6 +13,18 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 	In order to git push & Co, password authentication no longer works.
 	When git push-ing & Co, GCM will open an allow to log in.
 
+- On Linux / Raspberry OS:
+	- Generate an ssh key
+	- Add the ssh key to Github for the repository and under "Settings"
+	- Add the ssh key to the ssh-agent, else authentication doesn't work:
+			eval "$(ssh-agent -s)"
+			ssh-add ~/.ssh/github_ed25519
+
+			(github_ed25519 is the generated ssh key)
+
+			
+	Then git pull and also git push works.
+
 ---
 
 - Update all installed packages
