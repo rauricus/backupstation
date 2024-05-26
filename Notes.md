@@ -27,8 +27,24 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 	(see https://packaging.python.org/en/latest/guides/installing-using-linux-tools/#installing-pip-setuptools-wheel-with-linux-package-managers)
 
 
-- Install wiringpi package
-	pip install wiringpi
+- Create a Python virtual environment and activate it, install all requirements
+	python -m venv backup.venv
+	source backup.venv/bin/activate
+	pip3 install -r requirements.txt
+
+	To install manually:
+
+	- Install wiringpi package
+		pip3 install wiringpi
+
+	- Install spidev module
+		pip3 install spidev
+
+	- Install RPi module
+		pip3 install RPi.GPIO
+
+	- Install PIL module
+		pip3 install Pillow
 
 - LED wiren und so ein- und ausschalten
 	python src/backup-py/greenLEDon.py 
@@ -144,3 +160,19 @@ ePaper Display
 	- Select yes when it asks you to enable SPI
   
  ---
+
+Problems
+--------
+
+This error means that a script using the Waveshare EPD doesn't find its device drivers, etc.
+
+(backup.venv) pi@backup-station:~/backupstation $ python3 src/backup-py/backup_ctrl.py 
+INFO:root:Starting ePaper display...
+INFO:root:... inited
+INFO:root:... cleared
+INFO:root:cannot open resource
+
+Either change to src/backup-py and run from there. 
+I plan to attempt to fix this by switching to the waveshare-epaper module.
+	https://pypi.org/project/waveshare-epaper/
+
