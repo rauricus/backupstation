@@ -63,8 +63,9 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 
 	/dev/sda1	/mnt/ext_hdd	ext4	rw	0	0
 
-- create corresponding folder
+- create corresponding folder and give it to pi user
 	sudo mkdir /mnt/ext_hdd
+	sudo chown pi /mnt/ext_hdd
 
 - test if we can mount all drives
 	sudo mount -a
