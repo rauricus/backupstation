@@ -2,7 +2,7 @@
 log.txt
 
 # Nothing from waveshare EPD
-*.pyc
+waveshare_epd/
 
 # Python virtual environments
 backup.venv
