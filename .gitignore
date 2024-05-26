@@ -1,2 +1,8 @@
+# No log file
+log.txt
+
+# Nothing from waveshare EPD
+*.pyc
+
 # Python virtual environments
 backup.venv
