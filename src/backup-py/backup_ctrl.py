@@ -24,7 +24,7 @@ HDD_BASE_DIR = "/mnt/ext_hdd/"
 wiringpi.wiringPiSetupGpio()
 wiringpi.pinMode(2,0);      #GPIO-Pin 2 becomes in input for mode switching
 wiringpi.pinMode(18,1);     #GPIO-Pin 18 becomes an output for LED status display
-wiringpi.pullUpDnControl(2, 2)    #GPIO-Pin 2 is programmed to pull-up
+wiringpi.pullUpDnControl(2, 1)    #GPIO-Pin 2 is programmed to pull-down
 
 
 wiringpi.digitalWrite(18,1);   # LED on
@@ -59,26 +59,25 @@ def backup(dir_name):
 
 #============ Main Flow ===========================================================================
 
-if wiringpi.digitalRead(2):
+if not wiringpi.digitalRead(2):
     logging.info("No backup takes place.")
+    wiringpi.digitalWrite(18,0);   # LED off
     exit();    #if the GPIO is not actively pulled down the scrips exits here
 
 
 try:
-    logging.info("Starting ePaper display...")
+    logging.debug("Starting ePaper display...")
     
     epd = epd4in2.EPD()
     epd.init()
-    logging.info("... inited")
     epd.Clear()
-    logging.info("... cleared")
     time.sleep(3)
     
     font24 = ImageFont.truetype('Font.ttc', 24)
     font18 = ImageFont.truetype('Font.ttc', 18)
     font35 = ImageFont.truetype('Font.ttc', 35)
     
-    logging.info("Drawing initial background image...")
+    logging.debug("Drawing initial background image...")
     Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(Himage)
     draw.rectangle((0, 0, 400, 30), outline = 0, fill=0)
@@ -108,8 +107,9 @@ try:
     epd.display(epd.getbuffer(Himage))
     time.sleep(2)
 
-    if wiringpi.digitalRead(2):
+    if not wiringpi.digitalRead(2):
         logging.info("Switch changed, not shutting down.")
+        wiringpi.digitalWrite(18,0);   # LED off
         exit();    #if the GPIO is not actively pulled down the scrips exits here
 
     logging.info("Run complete, shutting down.")
@@ -119,7 +119,8 @@ except IOError as e:
     logging.info(e)
     
 except KeyboardInterrupt:    
-    logging.info("ctrl+c:")
+    logging.info("Keyboard interrupt")
     epd4in2.epdconfig.module_exit()
+    wiringpi.digitalWrite(18,0);   # LED off
     exit()
 
