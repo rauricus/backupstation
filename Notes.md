@@ -11,7 +11,7 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 	brew install --cask git-credential-manager
 
 	In order to git push & Co, password authentication no longer works.
-	When git push-ing & Co, GCM will open an allow to log in.
+	When git push-ing & Co, GCM will open a popup allowing to log in.
 
 - On Linux / Raspberry OS:
 	- Generate an ssh key
