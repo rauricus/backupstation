@@ -44,6 +44,9 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 	source .venv/bin/activate
 	pip3 install -r requirements.txt
 
+
+	ACHTUNG: Das ist nur für den Raspberry Pi gedacht. Eine Installation unter macos schlägt fehl, da hardware-spezifische Bibliotheken wie RPi.GPIO nicht für diese Architektur existieren.
+
 	To install manually:
 
 	- Install wiringpi package
