@@ -40,8 +40,8 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 
 
 - Create a Python virtual environment and activate it, install all requirements
-	python -m venv backup.venv
-	source backup.venv/bin/activate
+	python -m venv .venv
+	source .venv/bin/activate
 	pip3 install -r requirements.txt
 
 	To install manually:

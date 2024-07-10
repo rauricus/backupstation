@@ -5,4 +5,4 @@ log.txt
 waveshare_epd/
 
 # Python virtual environments
-backup.venv
+.venv
