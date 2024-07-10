@@ -178,7 +178,7 @@ Problems
 
 This error means that a script using the Waveshare EPD doesn't find its device drivers, etc.
 
-(backup.venv) pi@backup-station:~/backupstation $ python3 src/backup-py/backup_ctrl.py 
+(.venv) pi@backup-station:~/backupstation $ python3 src/backup-py/backup_ctrl.py 
 INFO:root:Starting ePaper display...
 INFO:root:... inited
 INFO:root:... cleared
