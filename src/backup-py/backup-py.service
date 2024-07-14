@@ -3,8 +3,8 @@ Description=Starts the backup process
 After=multi-user.target
 
 [Service]
-ExecStart=/home/pi/backup-py/backup_ctrl.py
-WorkingDirectory=/home/pi/backup-py
+ExecStart=/home/pi/backupstation/src/backup-py/backup_ctrl.py
+WorkingDirectory=/home/pi/backupstation/src/backup-py
 
 StandardOutput=inherit
 StandardError=inherit
@@ -14,5 +14,4 @@ Restart=always
 User=pi
 
 [Install]
-
 WantedBy=multi-user.target
