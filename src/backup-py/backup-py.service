@@ -3,7 +3,7 @@ Description=Starts the backup process
 After=multi-user.target
 
 [Service]
-ExecStart=/home/pi/backupstation/src/backup-py/backup_ctrl.py
+ExecStart=/home/pi/backupstation/backup.venv/bin/python3 backup_ctrl.py
 WorkingDirectory=/home/pi/backupstation/src/backup-py
 
 StandardOutput=inherit
