@@ -9,7 +9,7 @@ WorkingDirectory=/home/pi/backupstation/src/backup-py
 StandardOutput=inherit
 StandardError=inherit
 
-Restart=always
+Restart=on-failure
 
 User=pi
 
