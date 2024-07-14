@@ -3,8 +3,8 @@ Description=Switches the green LED on
 After=network-online.target
 
 [Service]
-ExecStart=/home/pi/backup-py/greenLEDon.py
-WorkingDirectory=/home/pi/backup-py
+ExecStart=backup.venv/bin/python3 greenLEDon.py
+WorkingDirectory=/home/pi/backupstation/src/backup-py
 
 StandardOutput=inherit
 StandardError=inherit
@@ -14,5 +14,4 @@ Restart=always
 User=pi
 
 [Install]
-
 WantedBy=multi-user.target
