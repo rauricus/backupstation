@@ -62,7 +62,7 @@ def backup(dir_name):
 if not wiringpi.digitalRead(2):
     logging.info("No backup takes place.")
     wiringpi.digitalWrite(18,0);   # LED off
-    exit();    #if the GPIO is not actively pulled down the scrips exits here
+    exit(0);    #if the GPIO is not actively pulled down the script exits here
 
 
 try:
@@ -110,17 +110,18 @@ try:
     if not wiringpi.digitalRead(2):
         logging.info("Switch changed, not shutting down.")
         wiringpi.digitalWrite(18,0);   # LED off
-        exit();    #if the GPIO is not actively pulled down the scrips exits here
+        exit(0);    # if the GPIO is not actively pulled down the scrips exits here
 
     logging.info("Run complete, shutting down.")
     os.system("sudo shutdown --poweroff now");  #If the switch in in Backup-Mode the Raspi will be shut down here
     
 except IOError as e:
-    logging.info(e)
+    logging.error(e)
+    exit(1)     # exit with general error
     
 except KeyboardInterrupt:    
     logging.info("Keyboard interrupt")
     epd4in2.epdconfig.module_exit()
     wiringpi.digitalWrite(18,0);   # LED off
-    exit()
+    exit(130)   # exit with "script terminated by ctrl-c"
 
