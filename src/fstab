@@ -4,16 +4,11 @@ PARTUUID=213a4e0b-02  /               ext4    defaults,noatime  0       1
 
 /dev/sda1	/mnt/ext_hdd	ext4	rw	0	0
 
-//theca.heimnetz.localnet/public /mnt/network/public       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-t
-heca
-//theca.heimnetz.localnet/home /mnt/network/home       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-t
-heca
-#//theca.heimnetz.localnet/video /mnt/network/video       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-t
-heca
-#//theca.heimnetz.localnet/music /mnt/network/music       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-t
-heca
-#//theca.heimnetz.localnet/photo /mnt/network/photo       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-t
-heca
+//theca.heimnetz.localnet/public /mnt/network/public       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-theca
+//theca.heimnetz.localnet/home /mnt/network/home       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-theca
+#//theca.heimnetz.localnet/video /mnt/network/video       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-theca
+#//theca.heimnetz.localnet/music /mnt/network/music       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-theca
+#//theca.heimnetz.localnet/photo /mnt/network/photo       cifs    uid=root,file_mode=0777,dir_mode=0777,credentials=/etc/.smb-credentials-theca
 
 # a swapfile is not a swap partition, no line here
 #   use  dphys-swapfile swap[on|off]  for that
