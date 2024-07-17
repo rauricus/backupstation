@@ -86,8 +86,8 @@ try:
     draw = ImageDraw.Draw(Himage)
 
     # Draw black background bars on top and bottom
-    draw.rectangle((0, 0, 400, 30), outline=0, fill=0)
-    draw.rectangle((0, 280, 400, 300), outline=0, fill=0)
+    draw.rectangle((0, 0, epd.width, 30), outline=0, fill=0)
+    draw.rectangle((0, epd.height - 20, epd.width, epd.height), outline=0, fill=0)
 
     # Calculate the width and height of the text to be drawn, so it's centered
     text = "Backup Station"
