@@ -24,7 +24,7 @@ HDD_BASE_DIR = "/mnt/ext_hdd/"
 HEADER_HEIGHT = 30
 ROW_HEIGHT = 20
 TABLE_ROW_HEIGHT = 30
-CELL_SPACING = 2
+CELL_SPACING = 40
 FOOTER_HEIGHT = 20
 
 font18 = ImageFont.truetype('Font.ttc', 18)
