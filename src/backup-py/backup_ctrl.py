@@ -69,13 +69,13 @@ def draw_table(draw, image_width, headers, data, font, start_y, fill=0):
     :param start_y: The y position to start drawing the table.
     :param fill: Color to use for the text.
     """
-    # Calculate the column widths based on the header widths
-    col_widths = [draw.textsize(header, font=font)[0] for header in headers]
+     # Calculate the column widths based on the header widths
+    col_widths = [draw.textbbox((0, 0), header, font=font)[2] for header in headers]
     
     # Ensure column widths can accommodate the widest text in each column
     for row in data:
         for i, col in enumerate(row):
-            col_widths[i] = max(col_widths[i], draw.textsize(col, font=font)[0])
+            col_widths[i] = max(col_widths[i], draw.textbbox((0, 0), col, font=font)[2])
     
     # Calculate x positions for each column
     x_positions = [sum(col_widths[:i]) for i in range(len(headers))]
@@ -92,6 +92,7 @@ def draw_table(draw, image_width, headers, data, font, start_y, fill=0):
         y_position = start_y + (row_num + 1) * TABLE_ROW_HEIGHT
         for col_num, col in enumerate(row):
             draw.text((x_positions[col_num], y_position), col, font=font, fill=fill)
+
 
 
 
