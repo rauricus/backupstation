@@ -25,6 +25,11 @@ Installed raspberry pi OS 64-bit Lite (Dec 2023)
 			
 	Then git pull and also git push works.
 
+
+- Installation des Scripts als systemd service
+	- sudo cp backup-py.service /etc/systemd/system/backup-py.service
+	- sudo systemctl enable backup-py.service
+
 ---
 
 - Update all installed packages
