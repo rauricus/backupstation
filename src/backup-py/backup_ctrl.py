@@ -78,12 +78,30 @@ try:
     font35 = ImageFont.truetype('Font.ttc', 35)
     
     logging.debug("Drawing initial background image...")
+
+    # Create a new blank image
     Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
+
+    # Create a drawing object
     draw = ImageDraw.Draw(Himage)
-    draw.rectangle((0, 0, 400, 30), outline = 0, fill=0)
-    draw.rectangle((0, 280, 400, 300), outline = 0, fill=0)
-    draw.text((120, 0), 'Backup Station', font = font24, fill = 255)
+
+    # Draw black background bars on top and bottom
+    draw.rectangle((0, 0, 400, 30), outline=0, fill=0)
+    draw.rectangle((0, 280, 400, 300), outline=0, fill=0)
+
+    # Calculate the width and height of the text to be drawn, so it's centered
+    text = "Backup Station"
+    text_width, text_height = draw.textsize(text, font=font24)
+
+    x_position = (epd.width - text_width) // 2
+    y_position = 0
+
+    # Draw the text on the image
+    draw.text((x_position, y_position), text, font=font24, fill=255)
+
+    # Display the image on the ePaper display
     epd.display(epd.getbuffer(Himage))
+
     time.sleep(2)
 
     #==================== Execute the backup for all mounted directories
