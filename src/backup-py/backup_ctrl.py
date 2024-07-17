@@ -93,6 +93,9 @@ if not wiringpi.digitalRead(2):
 
 
 try:
+
+    # ---  Write header
+
     logging.debug("Starting ePaper display...")
     
     epd = epd4in2.EPD()
@@ -116,22 +119,17 @@ try:
     draw.rectangle((0, 0, epd.width, 30), outline=0, fill=0)
     draw.rectangle((0, epd.height - 20, epd.width, epd.height), outline=0, fill=0)
 
-    # Calculate the width and height of the text to be drawn, so it's centered
-    text = "Backup Station"
-    text_width, text_height = draw.textsize(text, font=font24)
-
-    x_position = (epd.width - text_width) // 2
-    y_position = 0
-
-    # Draw the text on the image
-    draw.text((x_position, y_position), text, font=font24, fill=255)
+    # Draw the header text on the image
+    draw_centered_text(draw, epd.width, epd.height, "Backup Station", font24, 0, fill=255)
 
     # Display the image on the ePaper display
     epd.display(epd.getbuffer(Himage))
 
     time.sleep(2)
 
-    #==================== Execute the backup for all mounted directories
+
+    # --- Backup for all mounted directories
+
     dir_list = os.listdir(BACKUP_TARGETS_BASE_DIR)     # get a list of all mounted directories
     ypos = 30   # set the yposition of the ePaper text output
 
@@ -142,14 +140,21 @@ try:
 
     logging.info("Backup done.")
 
-    #===================  Write Footer on ePaper and shutdown
+
+    # ---  Write footer and shutdown
+
+    # Compute date and time backup ended.
     now = datetime.now()
     today = date.today()
     current_time = now.strftime("%H:%M:%S")
     current_date = today.strftime("%d-%m-%Y ");
-    draw.text((60, 281), 'Letztes Backup: '+current_date + current_time , font = font18, fill = 255)
 
+    # Write date centered in footer area.
+    draw_centered_text(draw, epd.width, epd.height, 'Letztes Backup: '+current_date + current_time, font18, epd.height-20 + 1, fill=255)
+
+    # Display the image on the ePaper display
     epd.display(epd.getbuffer(Himage))
+
     time.sleep(2)
 
     if not wiringpi.digitalRead(2):
