@@ -17,39 +17,22 @@ import traceback
 logging.basicConfig(level=logging.INFO)
 
 #==================================== Global Settings =============================================
+
 BACKUP_TARGETS_BASE_DIR = "/mnt/network/"
 HDD_BASE_DIR = "/mnt/ext_hdd/"
 
+HEADER_HEIGHT = 30
+ROW_HEIGHT = 20
+TABLE_ROW_HEIGHT = 30
+FOOTER_HEIGHT = 20
 
-#================ Backup function =============================================================
-def backup(dir_name):
-   draw.text((5,ypos), dir_name+": ", font=font18, fill=0)
-   print(dir_name+": ")
-   epd.display(epd.getbuffer(Himage))
-   time.sleep(2)
-
-   subprocess.run("/usr/bin/rdiff-backup -v 0 --print-statistics "+ BACKUP_TARGETS_BASE_DIR+dir_name+" "+HDD_BASE_DIR+dir_name + " > log.txt", shell=True)
-   f = open("log.txt", "r")
-   lines = f.readlines()
-   out_string = ""
-
-   for line in lines:
-       cols = line.split()
-       if cols[0] == 'NewFiles':
-           out_string = out_string+'New: '+cols[1]
-       if cols[0] == 'DeletedFiles':
-           out_string = out_string+' Del: ' + cols[1]
-       if cols[0] == 'ChangedFiles':
-           out_string = out_string+' Chgd: ' + cols[1]
-  
-   draw.text((110, ypos), out_string, font=font18, fill=0)
-   epd.display(epd.getbuffer(Himage))
-   time.sleep(2)
-
-   print(out_string)
+font18 = ImageFont.truetype('Font.ttc', 18)
+font24 = ImageFont.truetype('Font.ttc', 24)
+font35 = ImageFont.truetype('Font.ttc', 35)
 
 
 #============ Utility functions ==============================================================
+
 def draw_centered_text(draw, image_width, image_height, text, font, y_position, fill=255):
     """
     Draws text centered horizontally on the image at the specified y_position.
@@ -70,6 +53,43 @@ def draw_centered_text(draw, image_width, image_height, text, font, y_position, 
 
     # Draw the text on the image
     draw.text((x_position, y_position), text, font=font, fill=fill)
+
+
+def draw_table(draw, image_width, headers, data, font, start_y, fill=0):
+    """
+    Draws a table with headers and data.
+
+    :param draw: ImageDraw object to draw on.
+    :param image_width: Width of the image.
+    :param headers: List of header strings.
+    :param data: List of data rows, where each row is a list of column values.
+    :param font: Font object to use for the text.
+    :param start_y: The y position to start drawing the table.
+    :param fill: Color to use for the text.
+    """
+    # Calculate the column widths based on the header widths
+    col_widths = [draw.textsize(header, font=font)[0] for header in headers]
+    
+    # Ensure column widths can accommodate the widest text in each column
+    for row in data:
+        for i, col in enumerate(row):
+            col_widths[i] = max(col_widths[i], draw.textsize(col, font=font)[0])
+    
+    # Calculate x positions for each column
+    x_positions = [sum(col_widths[:i]) for i in range(len(headers))]
+
+    # Draw the headers
+    for i, header in enumerate(headers):
+        draw.text((x_positions[i], start_y), header, font=font, fill=fill)
+    
+    # Draw a separator line below the headers
+    draw.line((0, start_y + TABLE_ROW_HEIGHT - 5, image_width, start_y + TABLE_ROW_HEIGHT - 5), fill=fill)
+    
+    # Draw the data rows
+    for row_num, row in enumerate(data):
+        y_position = start_y + (row_num + 1) * TABLE_ROW_HEIGHT
+        for col_num, col in enumerate(row):
+            draw.text((x_positions[col_num], y_position), col, font=font, fill=fill)
 
 
 
@@ -103,10 +123,6 @@ try:
     epd.Clear()
     time.sleep(3)
     
-    font24 = ImageFont.truetype('Font.ttc', 24)
-    font18 = ImageFont.truetype('Font.ttc', 18)
-    font35 = ImageFont.truetype('Font.ttc', 35)
-    
     logging.debug("Drawing initial background image...")
 
     # Create a new blank image
@@ -131,14 +147,75 @@ try:
     # --- Backup for all mounted directories
 
     dir_list = os.listdir(BACKUP_TARGETS_BASE_DIR)     # get a list of all mounted directories
+
+    data = []
+
     ypos = 30   # set the yposition of the ePaper text output
 
     logging.info("Starting backup...")
-    for dir in dir_list:
-       backup(dir)
-       ypos = ypos + 20
+    for dir_name in dir_list:
+       
+        # Show name of directory we're about to back up
+        draw.text((5,ypos), dir_name+": ", font=font18, fill=0)
+        epd.display(epd.getbuffer(Himage))
+
+        logging.info(dir_name+": ")
+
+        time.sleep(2)
+
+        # === Run the actual backup ===
+        subprocess.run("/usr/bin/rdiff-backup -v 0 --print-statistics "+ BACKUP_TARGETS_BASE_DIR+dir_name+" "+HDD_BASE_DIR+dir_name + " > log.txt", shell=True)
+
+        # Extract results in log file and write to screen
+        f = open("log.txt", "r")
+        lines = f.readlines()
+        result_string = ""
+
+        for line in lines:
+            cols = line.split()
+            if cols[0] == 'NewFiles':
+                new_files = cols[1]
+                result_string = result_string+'New: '+ new_files
+            if cols[0] == 'DeletedFiles':
+                deleted_files = cols[1]
+                result_string = result_string+' Del: ' + deleted_files
+            if cols[0] == 'ChangedFiles':
+                changed_files = cols[1]
+                result_string = result_string+' Chgd: ' + changed_files
+        
+        draw.text((110, ypos), result_string, font=font18, fill=0)
+        epd.display(epd.getbuffer(Himage))
+
+        logging.info(result_string)
+
+        time.sleep(2)
+
+        # Remember data for final summary
+        data.append([dir_name,new_files, changed_files, deleted_files])
+
+        ypos = ypos + 20
 
     logging.info("Backup done.")
+
+    # --- Delete screen and write summary in table
+
+    headers = ["Ort", "Neu", "Geändert", "Gelöscht"]
+    
+    # Define starting Y position
+    start_y = 50
+
+    # Define the coordinates of the portion you want to clear
+    x1, y1 = 50, 50  # top-left corner of the rectangle
+    x2, y2 = 200, 100  # bottom-right corner of the rectangle
+
+    # Draw a white rectangle over the specified portion to clear it
+    draw.rectangle((0, HEADER_HEIGHT, epd.width, epd.height - FOOTER_HEIGHT), outline=255, fill=255)
+
+    # Use the function to draw the table
+    draw_table(draw, epd.width, headers, data, font18, start_y, fill=0)
+
+    # Display the image on the ePaper display
+    epd.display(epd.getbuffer(Himage))
 
 
     # ---  Write footer and shutdown
@@ -157,6 +234,7 @@ try:
 
     time.sleep(2)
 
+    # ---  Shutdown
     if not wiringpi.digitalRead(2):
         logging.info("Switch changed, not shutting down.")
         wiringpi.digitalWrite(18,0);   # LED off
