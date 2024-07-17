@@ -24,6 +24,7 @@ HDD_BASE_DIR = "/mnt/ext_hdd/"
 HEADER_HEIGHT = 30
 ROW_HEIGHT = 20
 TABLE_ROW_HEIGHT = 30
+CELL_SPACING = 20
 FOOTER_HEIGHT = 20
 
 font18 = ImageFont.truetype('Font.ttc', 18)
@@ -75,7 +76,7 @@ def draw_table(draw, image_width, headers, data, font, start_y, fill=0):
     # Ensure column widths can accommodate the widest text in each column
     for row in data:
         for i, col in enumerate(row):
-            col_widths[i] = max(col_widths[i], draw.textbbox((0, 0), col, font=font)[2])
+            col_widths[i] = max(col_widths[i], draw.textbbox((0, 0), col, font=font)[2]) + CELL_SPACING
     
     # Calculate x positions for each column
     x_positions = [sum(col_widths[:i]) for i in range(len(headers))]
