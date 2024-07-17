@@ -20,14 +20,6 @@ logging.basicConfig(level=logging.INFO)
 BACKUP_TARGETS_BASE_DIR = "/mnt/network/"
 HDD_BASE_DIR = "/mnt/ext_hdd/"
 
-#============  WiringPi Setup for Mode Switch connected between GPIO2 and GND =====================
-wiringpi.wiringPiSetupGpio()
-wiringpi.pinMode(2,0);      #GPIO-Pin 2 becomes in input for mode switching
-wiringpi.pinMode(18,1);     #GPIO-Pin 18 becomes an output for LED status display
-wiringpi.pullUpDnControl(2, 1)    #GPIO-Pin 2 is programmed to pull-down
-
-
-wiringpi.digitalWrite(18,1);   # LED on
 
 #================ Backup function =============================================================
 def backup(dir_name):
@@ -57,8 +49,43 @@ def backup(dir_name):
    print(out_string)
 
 
-#============ Main Flow ===========================================================================
+#============ Utility functions ==============================================================
+def draw_centered_text(draw, image_width, image_height, text, font, y_position, fill=255):
+    """
+    Draws text centered horizontally on the image at the specified y_position.
 
+    :param draw: ImageDraw object to draw on.
+    :param image_width: Width of the image.
+    :param image_height: Height of the image (not used in this function, but included for completeness).
+    :param text: The text to draw.
+    :param font: Font object to use for the text.
+    :param y_position: The y position to draw the text at.
+    :param fill: Color to use for the text.
+    """
+    # Calculate the width and height of the text to be drawn
+    text_width, text_height = draw.textsize(text, font=font)
+    
+    # Calculate the position at which to draw the text so that it is centered
+    x_position = (image_width - text_width) // 2
+
+    # Draw the text on the image
+    draw.text((x_position, y_position), text, font=font, fill=fill)
+
+
+
+#============ Main ===========================================================================
+
+# --- WiringPi setup for Mode Switch connected between GPIO2 and GND ---
+wiringpi.wiringPiSetupGpio()
+wiringpi.pinMode(2,0);      #GPIO-Pin 2 becomes in input for mode switching
+wiringpi.pinMode(18,1);     #GPIO-Pin 18 becomes an output for LED status display
+wiringpi.pullUpDnControl(2, 1)    #GPIO-Pin 2 is programmed to pull-down
+
+
+wiringpi.digitalWrite(18,1);   # LED on
+
+
+# --- Main flow ---
 if not wiringpi.digitalRead(2):
     logging.info("No backup takes place.")
     wiringpi.digitalWrite(18,0);   # LED off
