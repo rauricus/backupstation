@@ -45,8 +45,10 @@ def draw_centered_text(draw, image_width, image_height, text, font, y_position, 
     :param y_position: The y position to draw the text at.
     :param fill: Color to use for the text.
     """
-    # Calculate the width and height of the text to be drawn
-    text_width, text_height = draw.textsize(text, font=font)
+    
+    # Calculate the bounding box of the text to be drawn
+    bbox = draw.textbbox((0, 0), text, font=font)
+    text_width = bbox[2] - bbox[0]
     
     # Calculate the position at which to draw the text so that it is centered
     x_position = (image_width - text_width) // 2
