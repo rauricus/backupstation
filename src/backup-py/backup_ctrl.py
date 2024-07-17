@@ -132,8 +132,8 @@ try:
     draw = ImageDraw.Draw(Himage)
 
     # Draw black background bars on top and bottom
-    draw.rectangle((0, 0, epd.width, 30), outline=0, fill=0)
-    draw.rectangle((0, epd.height - 20, epd.width, epd.height), outline=0, fill=0)
+    draw.rectangle((0, 0, epd.width, HEADER_HEIGHT), outline=0, fill=0)
+    draw.rectangle((0, epd.height - FOOTER_HEIGHT, epd.width, epd.height), outline=0, fill=0)
 
     # Draw the header text on the image
     draw_centered_text(draw, epd.width, epd.height, "Backup Station", font24, 0, fill=255)
@@ -193,26 +193,19 @@ try:
         # Remember data for final summary
         data.append([dir_name,new_files, changed_files, deleted_files])
 
-        ypos = ypos + 20
+        ypos = ypos + ROW_HEIGHT
 
     logging.info("Backup done.")
 
     # --- Delete screen and write summary in table
 
     headers = ["Ort", "Neu", "Geändert", "Gelöscht"]
-    
-    # Define starting Y position
-    start_y = 50
-
-    # Define the coordinates of the portion you want to clear
-    x1, y1 = 50, 50  # top-left corner of the rectangle
-    x2, y2 = 200, 100  # bottom-right corner of the rectangle
 
     # Draw a white rectangle over the specified portion to clear it
     draw.rectangle((0, HEADER_HEIGHT, epd.width, epd.height - FOOTER_HEIGHT), outline=255, fill=255)
 
     # Use the function to draw the table
-    draw_table(draw, epd.width, headers, data, font18, start_y, fill=0)
+    draw_table(draw, epd.width, headers, data, font18, HEADER_HEIGHT+20, fill=0)
 
     # Display the image on the ePaper display
     epd.display(epd.getbuffer(Himage))
@@ -227,7 +220,8 @@ try:
     current_date = today.strftime("%d-%m-%Y ");
 
     # Write date centered in footer area.
-    draw_centered_text(draw, epd.width, epd.height, 'Letztes Backup: '+current_date + current_time, font18, epd.height-20 + 1, fill=255)
+    footer_text = 'Letztes Backup: '+current_date + current_time
+    draw_centered_text(draw, epd.width, epd.height, footer_text, font18, epd.height-FOOTER_HEIGHT + 1, fill=255)
 
     # Display the image on the ePaper display
     epd.display(epd.getbuffer(Himage))
